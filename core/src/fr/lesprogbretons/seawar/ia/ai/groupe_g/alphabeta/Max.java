@@ -15,29 +15,41 @@ import static java.lang.StrictMath.max;
 
 public class Max extends Noeud {
 
+    /*
+    *  Stocker :
+    *  le joueur + l'adv ?
+    *  valeur de retour de l'algo alphabeta ?
+    *
+    *
+    *
+    * */
+
+
+
+
     public Max(Etat etat){
         super(etat);
     }
 
 
     @Override
-    public void genererFils() { //TODO: preciser le nombre d'etage de generation ?
-        //TODO: creer les fils du noeud en cours en fonction de l'état
-        //deplacement d'une case (le controller ne gère que des déplacements d'une case) + tir possible
+    public void genererFils() {
 
         HashSet<Action> actions = getActionsPossible();
         for (Action action : actions) {
             Noeud nextAction = new Max(etat.clone());
             nextAction.getEtat().simulateAction(action); //mettre à jour l'état
             fils.add(nextAction);
-            //TODO: generer les fils de nextAction => implementer avec une file ???
         }
-
+        //TODO: changement de tour
         Noeud nextAction = new Min(etat.clone());// TODO: on le fait avec un Min ?
         nextAction.getEtat().simulateAction(new PassTurn(null));//hmm... PassTurn serait plutôt pour un bateau...
     }
 
-
+    /**
+     * Fonction heuristique
+     * @return une heuristique
+     */
     @Override
     public int utilite() {
         //TODO: Creer une fonction heuristique qui retourne une valeur en fonction de l'etat
@@ -45,6 +57,14 @@ public class Max extends Noeud {
         return 0;
     }
 
+    /**
+     * Algorithme AlphaBeta
+     * @param alpha
+     * @param beta
+     * @return un entier
+     * //TODO : faire une fonction pour retouver le noeud grace à la valeur de retour de l'algo
+     * //TODO : Strocker dans une variable d'instance la valeur alpha ???
+     */
     @Override
     public int alphabeta(int alpha, int beta) {
         if(fils == null || fils.isEmpty()) {
@@ -58,6 +78,11 @@ public class Max extends Noeud {
         }
     }
 
+    /**
+     * Cherche toutes les actions possibles (deplacement + tir) pour les 2 bateaux
+     * @return Liste d'action
+     * //TODO: A finir + passer le tour ??? (ou dans genererFils si on le fait avec un min)
+     */
     @Override
     public HashSet<Action> getActionsPossible() {
         //TODO: etudier les actions possible pour max (bateau du joueur1 par ex)
@@ -84,6 +109,12 @@ public class Max extends Noeud {
         return null;
     }
 
+
+    /**
+     * Cherche les deplacements possible (d'une seule case) pour un bateau
+     * @param boat
+     * @return Liste d'actions de Deplacement
+     */
     public HashSet<Action> getDeplacement(Boat boat) {
         HashSet<Action> actions = new HashSet<Action>();
         ArrayList<Case> tab = etat.getMove(boat);
