@@ -1,6 +1,6 @@
 package fr.lesprogbretons.seawar.ia.ai.groupe_g.alphabeta;
 
-import fr.lesprogbretons.seawar.ia.etat.Etat;
+import fr.lesprogbretons.seawar.ia.ai.groupe_g.etat.Etat;
 import fr.lesprogbretons.seawar.model.actions.Action;
 
 import java.util.HashSet;

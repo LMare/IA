@@ -1,4 +1,4 @@
-package fr.lesprogbretons.seawar.ia.etat;
+package fr.lesprogbretons.seawar.ia.ai.groupe_g.etat;
 
 import fr.lesprogbretons.seawar.model.Orientation;
 import fr.lesprogbretons.seawar.model.Partie;
