@@ -25,7 +25,17 @@ public class Etat {
     }
 
     public Etat clone() {
-        return new Etat(partie); //TODO: cloner la partie ???
+        Etat clone = new Etat(partie);
+        clone.setPartie(partie.clone());
+        return clone;
+    }
+
+    public Partie getPartie() {
+        return partie;
+    }
+
+    public void setPartie(Partie partie) {
+        this.partie = partie;
     }
 
     public void simulateAction(Action action) {

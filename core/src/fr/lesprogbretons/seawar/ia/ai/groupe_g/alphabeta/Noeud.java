@@ -18,7 +18,7 @@ public abstract class Noeud {
      * Constructeur :
      *
      */
-    Noeud(Etat etat) {
+    public Noeud(Etat etat) {
         this.etat = etat;
     }
 
@@ -29,5 +29,17 @@ public abstract class Noeud {
 
     public Etat getEtat() {
         return etat;
+    }
+
+    public void genererFils(int etage) {
+        if(fils == null) {
+            fils = new HashSet<Noeud>();
+            genererFils();
+        }
+        if(etage > 0) {
+            for (Noeud noeud : fils) {
+                noeud.genererFils(--etage);
+            }
+        }
     }
 }
