@@ -1,4 +1,4 @@
-package fr.lesprogbretons.seawar.ia.alphabeta;
+package fr.lesprogbretons.seawar.ia.ai.groupe_g.alphabeta;
 
 
 import fr.lesprogbretons.seawar.ia.etat.Etat;
