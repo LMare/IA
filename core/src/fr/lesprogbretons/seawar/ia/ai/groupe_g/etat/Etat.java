@@ -26,7 +26,7 @@ public class Etat {
 
     public Etat clone() {
         Etat clone = new Etat(partie);
-        clone.setPartie(partie.clone());
+        clone.setPartie((Partie) partie.clone());
         return clone;
     }
 
