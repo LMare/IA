@@ -2,8 +2,10 @@ package fr.lesprogbretons.seawar.ia.ai.groupe_g.alphabeta;
 
 
 import fr.lesprogbretons.seawar.ia.ai.groupe_g.etat.Etat;
+import fr.lesprogbretons.seawar.model.Partie;
 import fr.lesprogbretons.seawar.model.actions.Action;
 import fr.lesprogbretons.seawar.model.actions.PassTurn;
+import fr.lesprogbretons.seawar.model.boat.Boat;
 
 import java.util.HashSet;
 
@@ -34,8 +36,11 @@ public class Min extends Noeud {
 
     @Override
     public int utilite() {
-        //TODO: Creer une fonction heuristique qui retourne une valeur en fonction de l'etat
-        return 0;
+        //TODO: Ameliorer l'heuristique
+        Boat nav1 = etat.getPartie().getMap().getBateaux2().get(0);
+
+
+        return -distNearestPhare(nav1);
     }
 
     @Override

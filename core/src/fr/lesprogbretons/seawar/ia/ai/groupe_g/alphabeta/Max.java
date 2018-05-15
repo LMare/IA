@@ -2,6 +2,7 @@ package fr.lesprogbretons.seawar.ia.ai.groupe_g.alphabeta;
 
 
 import fr.lesprogbretons.seawar.ia.ai.groupe_g.etat.Etat;
+import fr.lesprogbretons.seawar.model.Partie;
 import fr.lesprogbretons.seawar.model.actions.Action;
 import fr.lesprogbretons.seawar.model.actions.MoveBoat;
 import fr.lesprogbretons.seawar.model.actions.PassTurn;
@@ -46,15 +47,19 @@ public class Max extends Noeud {
         nextAction.getEtat().simulateAction(new PassTurn(null));//hmm... PassTurn serait plutôt pour un bateau...
     }
 
+
+
     /**
      * Fonction heuristique
      * @return une heuristique
      */
     @Override
     public int utilite() {
-        //TODO: Creer une fonction heuristique qui retourne une valeur en fonction de l'etat
+        //TODO: Ameliorer l'heuristique
+        Boat nav1 = etat.getPartie().getMap().getBateaux1().get(0);
 
-        return 0;
+
+        return -distNearestPhare(nav1);
     }
 
     /**
