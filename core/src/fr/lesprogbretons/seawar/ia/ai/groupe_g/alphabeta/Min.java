@@ -44,14 +44,8 @@ public class Min extends Noeud {
                 beta = min(beta, noeud.alphabeta(alpha, beta));
                 if (beta < alpha) break;
             }
-            return beta;//TODO:  verifier !!!
+            return beta;
         }
     }
 
-
-    @Override
-    public HashSet<Action> getActionsPossible() {
-        //TODO: etudier les actions possible pour min (bateau du joueur2 par ex)
-        return null;
-    }
 }
