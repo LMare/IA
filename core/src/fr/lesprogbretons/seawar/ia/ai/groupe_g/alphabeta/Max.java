@@ -69,7 +69,11 @@ public class Max extends Noeud {
             return utilite();
         } else {
             for (Noeud noeud : fils) {
-                alpha = max(alpha, noeud.alphabeta(alpha, beta));
+                int filsVal = noeud.alphabeta(alpha, beta);
+                if(alpha < filsVal) {
+                    alpha = filsVal;
+                    bestNoeud = noeud;
+                }
                 if (beta < alpha) break;
             }
             return alpha;

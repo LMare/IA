@@ -41,7 +41,11 @@ public class Min extends Noeud {
             return utilite();
         } else {
             for (Noeud noeud : fils) {
-                beta = min(beta, noeud.alphabeta(alpha, beta));
+                int filsVal = noeud.alphabeta(alpha, beta);
+                if (beta > filsVal) {
+                    beta = filsVal;
+                    bestNoeud = noeud;
+                }
                 if (beta < alpha) break;
             }
             return beta;
