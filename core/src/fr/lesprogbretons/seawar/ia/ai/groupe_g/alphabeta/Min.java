@@ -41,7 +41,7 @@ public class Min extends Noeud {
             return utilite();
         } else {
             for (Noeud noeud : fils) {
-                alpha = min(beta, noeud.alphabeta(alpha, beta));
+                beta = min(beta, noeud.alphabeta(alpha, beta));
                 if (beta < alpha) break;
             }
             return beta;//TODO:  verifier !!!
