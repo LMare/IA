@@ -28,7 +28,13 @@ public abstract class Noeud {
     public abstract void genererFils();
 
     /**On cherche a minimiser l'utilite*/
-    public abstract int utilite();
+    public int utilite() {
+        //TODO: Ameliorer l'heuristique
+
+        Boat nav1 = etat.getPartie().getCurrentPlayer().getBoats().get(0);
+
+        return -distNearestPhare(nav1);
+    }
 
     public abstract int alphabeta(int alpha, int beta);
 
