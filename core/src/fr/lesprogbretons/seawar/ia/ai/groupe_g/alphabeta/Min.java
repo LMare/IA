@@ -51,10 +51,4 @@ public class Min extends Noeud {
         }
     }
 
-
-    @Override
-    public HashSet<Action> getActionsPossible() {
-        //TODO: etudier les actions possible pour min (bateau du joueur2 par ex)
-        return null;
-    }
 }
