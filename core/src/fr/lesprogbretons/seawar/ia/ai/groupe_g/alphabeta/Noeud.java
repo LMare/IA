@@ -14,6 +14,7 @@ public abstract class Noeud {
     protected Etat etat;
     protected HashSet<Noeud> fils;
     protected Action action;
+    protected Noeud bestNoeud;
 
     //protected Joueur joueur
 
