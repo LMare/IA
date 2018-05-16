@@ -53,14 +53,7 @@ public class Max extends Noeud {
      * Fonction heuristique
      * @return une heuristique
      */
-    @Override
-    public int utilite() {
-        //TODO: Ameliorer l'heuristique
-        Boat nav1 = etat.getPartie().getMap().getBateaux1().get(0);
-
-
-        return -distNearestPhare(nav1);
-    }
+    
 
     /**
      * Algorithme AlphaBeta

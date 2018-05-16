@@ -36,7 +36,7 @@ public class IA_Groupe_G extends AbstractIA {
                 //TODO: Executer la meilleur action/ les actions (tout les noeuds max)
             } else { // On a du temps pour trouver une solution plus precise
                 initial.genererFils(etage);
-                alphabeta = initial.alphabeta(999999999, -999999999); // +/- l'infini
+                alphabeta = initial.alphabeta(Integer.MAX_VALUE, Integer.MIN_VALUE);
 
                 // On incremente le nombre d'étage
                 etage++;
