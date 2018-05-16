@@ -33,6 +33,14 @@ public abstract class Noeud {
 
     public abstract int alphabeta(int alpha, int beta);
 
+    public Noeud getBestNoeud() {
+        return bestNoeud;
+    }
+
+    public Action getAction() {
+        return action;
+    }
+
     /**On cherche a minimiser l'utilite*/
     public int utilite() {
         //TODO: Ameliorer l'heuristique

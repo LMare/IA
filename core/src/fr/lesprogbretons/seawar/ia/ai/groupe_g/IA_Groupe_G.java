@@ -2,6 +2,7 @@ package fr.lesprogbretons.seawar.ia.ai.groupe_g;
 
 import fr.lesprogbretons.seawar.ia.AbstractIA;
 import fr.lesprogbretons.seawar.ia.ai.groupe_g.alphabeta.Max;
+import fr.lesprogbretons.seawar.ia.ai.groupe_g.alphabeta.Noeud;
 import fr.lesprogbretons.seawar.ia.ai.groupe_g.etat.Etat;
 import fr.lesprogbretons.seawar.model.Partie;
 import fr.lesprogbretons.seawar.model.actions.Action;
@@ -34,6 +35,14 @@ public class IA_Groupe_G extends AbstractIA {
 
                 //TODO: retrouver la meilleur branche avec la valeur alphabeta !
                 //TODO: Executer la meilleur action/ les actions (tout les noeuds max)
+                Noeud noeud = initial;
+                while (noeud instanceof Max) {
+                    noeud.getBestNoeud().getAction().apply(null);
+                    noeud = noeud.getBestNoeud();
+                }
+
+
+                process = false;
             } else { // On a du temps pour trouver une solution plus precise
                 initial.genererFils(etage);
                 alphabeta = initial.alphabeta(Integer.MAX_VALUE, Integer.MIN_VALUE);
@@ -42,6 +51,8 @@ public class IA_Groupe_G extends AbstractIA {
                 etage++;
                 // idee pour ameliorer les performances : trier les noeuds fils
                 // parallelisation avec des threads (pour la generation des fils)
+
+                System.out.println("etage = "+etage);
             }
         }
 

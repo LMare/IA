@@ -27,7 +27,6 @@ public class Min extends Noeud {
             Noeud nextAction = new Min(etat.clone());
             nextAction.getEtat().simulateAction(action); //mettre à jour l'état
             fils.add(nextAction);
-            //TODO: generer les fils de nextAction => implementer avec une file ???
         }
 
         Noeud nextAction = new Max(etat.clone());// TODO: on le fait avec un Max ?
