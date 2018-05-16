@@ -34,14 +34,7 @@ public class Min extends Noeud {
         nextAction.getEtat().simulateAction(new PassTurn(null));
     }
 
-    @Override
-    public int utilite() {
-        //TODO: Ameliorer l'heuristique
-        Boat nav1 = etat.getPartie().getMap().getBateaux2().get(0);
 
-
-        return -distNearestPhare(nav1);
-    }
 
     @Override
     public int alphabeta(int alpha, int beta) {

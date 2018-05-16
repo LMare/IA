@@ -3,10 +3,13 @@ package fr.lesprogbretons.seawar.ia.ai.groupe_g.alphabeta;
 import fr.lesprogbretons.seawar.ia.ai.groupe_g.etat.Etat;
 import fr.lesprogbretons.seawar.model.Partie;
 import fr.lesprogbretons.seawar.model.actions.Action;
+import fr.lesprogbretons.seawar.model.actions.MoveBoat;
+import fr.lesprogbretons.seawar.model.actions.PassTurn;
 import fr.lesprogbretons.seawar.model.boat.Boat;
 import fr.lesprogbretons.seawar.model.cases.Case;
 import fr.lesprogbretons.seawar.model.map.Grille;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public abstract class Noeud {
@@ -28,6 +31,8 @@ public abstract class Noeud {
 
     public abstract void genererFils();
 
+    public abstract int alphabeta(int alpha, int beta);
+
     /**On cherche a minimiser l'utilite*/
     public int utilite() {
         //TODO: Ameliorer l'heuristique
@@ -37,9 +42,8 @@ public abstract class Noeud {
         return -distNearestPhare(nav1);
     }
 
-    public abstract int alphabeta(int alpha, int beta);
 
-    public abstract HashSet<Action> getActionsPossible();
+
 
     public Etat getEtat() {
         return etat;
@@ -102,5 +106,49 @@ public abstract class Noeud {
         return minDist;
     }
 
+
+    /**
+     * Cherche toutes les actions possibles (deplacement + tir) pour les 2 bateaux
+     * @return Liste d'action
+     */
+    public HashSet<Action> getActionsPossible() {
+        HashSet<Action> actions = new HashSet<Action>();
+        Boat nav1 = etat.getPartie().getCurrentPlayer().getBoats().get(0);
+        Boat nav2 = etat.getPartie().getCurrentPlayer().getBoats().get(1);
+
+        if (false) {// canPlayBoat1
+            actions.addAll(getDeplacement(nav1));
+            //TODO: tir bateau 1
+            if (nav1.getMove() != nav1.getMoveAvailable()) {
+                actions.add(new PassTurn(nav1));
+            }
+        }
+        if (false) {// canPlayBoat2
+            actions.addAll(getDeplacement(etat.getPartie().getMap().getBateaux1().get(1)));
+            //TODO: tir bateau 2
+            if (nav2.getMove() != nav2.getMoveAvailable()) {
+                actions.add(new PassTurn(nav1));
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * Cherche les deplacements possible (d'une seule case) pour un bateau
+     * @param boat
+     * @return Liste d'actions de Deplacement
+     */
+    public HashSet<Action> getDeplacement(Boat boat) {
+        HashSet<Action> actions = new HashSet<Action>();
+        ArrayList<Case> tab = etat.getMove(boat);
+        if(tab != null) {
+            for (Case cell: tab) {
+                MoveBoat action = new MoveBoat(boat, cell);
+                actions.add(action);
+            }
+        }
+        return actions;
+    }
 
 }
