@@ -35,7 +35,6 @@ public class Min extends Noeud {
     }
 
 
-
     @Override
     public int alphabeta(int alpha, int beta) {
         if(fils == null || fils.isEmpty()) {

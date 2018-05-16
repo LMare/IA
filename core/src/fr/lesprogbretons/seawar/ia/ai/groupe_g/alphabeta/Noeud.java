@@ -39,7 +39,7 @@ public abstract class Noeud {
 
         Boat nav1 = etat.getPartie().getCurrentPlayer().getBoats().get(0);
 
-        return -distNearestPhare(nav1);
+        return -distNearestPhare(nav1)-getNbPharesPossede()*100;
     }
 
 
@@ -105,6 +105,25 @@ public abstract class Noeud {
         }
         return minDist;
     }
+
+    /**
+     * Fonction indiquant le nombre de phares possede par le joueur courant
+     * @return le nombre de phares possede par le joueur courant
+     */
+    protected int getNbPharesPossede() {
+        int i;
+        int nbPhares=0;
+
+        Case[] phares=getPhares();
+        for(i=0;i<3;i++){//3 car il y toujours 3 phares
+            if(phares[i].getPossedePhare()==etat.getPartie().getCurrentPlayer()) {//On ss'interesent uniquement aux phares appartenant au joueur courant (soi)
+                nbPhares+=1;
+            }
+        }
+        return nbPhares;
+    }
+
+
 
 
     /**
