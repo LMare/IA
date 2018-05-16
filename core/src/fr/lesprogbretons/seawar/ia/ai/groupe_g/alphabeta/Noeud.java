@@ -83,12 +83,13 @@ public abstract class Noeud {
 
         Case[] phares=getPhares();
         for(i=0;i<3;i++){//3 car il y toujours 3 phares
-            //TODO Pour l'instant,on ne s'interesent qu'au navire 1, a changer
-            int dx=nav.getPosition().getX()-phares[i].getX();
-            int dy=nav.getPosition().getY()-phares[i].getY();
-            int dist=(int) Math.floor(Math.sqrt(dx*dx+dy*dy));
-            if(dist<minDist){
-                minDist=dist;
+            if(phares[i].getPossedePhare()!=etat.getPartie().getCurrentPlayer()) {//On ss'interesent uniquement aux phares n'appartenant pas au joueur courant (soi)
+                int dx = nav.getPosition().getX() - phares[i].getX();
+                int dy = nav.getPosition().getY() - phares[i].getY();
+                int dist = (int) Math.floor(Math.sqrt(dx * dx + dy * dy));
+                if (dist < minDist) {
+                    minDist = dist;
+                }
             }
         }
         return minDist;
