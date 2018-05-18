@@ -1,84 +1,80 @@
 package fr.lesprogbretons.seawar.model.map;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import com.badlogic.gdx.math.Vector2;
-
 import fr.lesprogbretons.seawar.model.Orientation;
 import fr.lesprogbretons.seawar.model.boat.Amiral;
+
+import fr.lesprogbretons.seawar.model.boat.Boat;
 import fr.lesprogbretons.seawar.model.boat.Fregate;
 import fr.lesprogbretons.seawar.model.cases.CaseTerre;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * RandomMap Class is for generating randomized Map 
- * @author aghilas
+ * RandomMap Class is for generating randomized Map
  *
+ * @author aghilas
  */
 
 
-public class RandomMap extends Grille{
+public class RandomMap extends Grille {
 
-	private final int hauteur=13;
-	private final int largeur=11;
-	private final int nbrLightHouse=3;
-	
-	/**
-	 * Amiral / Joueur 1
-	 */
-	private final int posAmiralXJ1=10;
-	private final int posAmiralYJ1=0;
-	/**
-	 * Fregate / Joueur 1
-	 */
-	private final int posFregXJ1=10;
-	private final int posFregYJ1=1;
-	
-	/**
-	 * Amiral / Joueur 1
-	 */
-	private final int posAmiralXJ2=1;
-	private final int posAmiralYJ2=12;
-	/**
-	 * Fregate / Joueur 1
-	 */
-	private final int posFregXJ2=0;
-	private final int posFregYJ2=12;
+    private final int hauteur = 13;
+    private final int largeur = 11;
+    private final int nbrLightHouse = 3;
 
-	private List<Integer> freeCases;
-	
-	
-	
-	public RandomMap(int hauteur, int largeur) {
-		super(hauteur, largeur);
-		this.freeCases=new ArrayList<Integer>();
-		for (int j=0; j< hauteur*largeur; j++) { freeCases.add(j);}
-		
-		
-		
-		
-		
+    /**
+     * Amiral / Joueur 1
+     */
+    private final int posAmiralXJ1 = 10;
+    private final int posAmiralYJ1 = 0;
+    /**
+     * Fregate / Joueur 1
+     */
+    private final int posFregXJ1 = 10;
+    private final int posFregYJ1 = 1;
+
+    /**
+     * Amiral / Joueur 1
+     */
+    private final int posAmiralXJ2 = 1;
+    private final int posAmiralYJ2 = 12;
+    /**
+     * Fregate / Joueur 1
+     */
+    private final int posFregXJ2 = 0;
+    private final int posFregYJ2 = 12;
+
+    private List<Integer> freeCases;
+
+
+    public RandomMap(int hauteur, int largeur) {
+        super(hauteur, largeur);
+        this.freeCases = new ArrayList<Integer>();
+        for (int j = 0; j < hauteur * largeur; j++) {
+            freeCases.add(j);
+        }
+
+
         bateaux1.add(new Amiral(tableau[posAmiralXJ1][posAmiralYJ1], getJoueur1()));
         bateaux1.get(0).setOrientation(Orientation.SUDEST);
-        
+
         //bateaux1.add(new Fregate(tableau[posFregXJ1][posFregYJ1], getJoueur1()));
         //bateaux1.get(1).setOrientation(Orientation.SUDEST);
 
-        int absPosAmiralJ1=posAmiralXJ1+hauteur*posAmiralYJ1;
+        int absPosAmiralJ1 = posAmiralXJ1 + hauteur * posAmiralYJ1;
         freeCases.remove(absPosAmiralJ1);
-		//int absPosFregJ1=posFregXJ1+hauteur*posFregYJ1;
-		//freeCases.remove(absPosFregJ1);
-		
-		
-        
-        
+        //int absPosFregJ1=posFregXJ1+hauteur*posFregYJ1;
+        //freeCases.remove(absPosFregJ1);
+
+
         bateaux2.add(new Amiral(tableau[posAmiralXJ2][posAmiralYJ2], getJoueur2()));
         bateaux2.get(0).setOrientation(Orientation.NORDOUEST);
         //bateaux2.add(new Fregate(tableau[posFregXJ2][posFregYJ2], getJoueur2()));
         //bateaux2.get(1).setOrientation(Orientation.NORDOUEST);
-		
-        int absPosAmiralJ2=hauteur*posAmiralYJ2+posAmiralXJ2;
+
+        int absPosAmiralJ2 = hauteur * posAmiralYJ2 + posAmiralXJ2;
         freeCases.remove(absPosAmiralJ2);
 		//int absPosFregJ2=hauteur*posFregYJ2+posFregXJ2;
 		//freeCases.remove(absPosFregJ2);
@@ -101,9 +97,21 @@ public class RandomMap extends Grille{
 			int yTerre   = (int) Math.ceil(freeCases.get(iTerre)%hauteur);
 			if (xTerre<0) {xTerre=0;}
 			if (yTerre<0) {yTerre=0;}
-			tableau[yTerre][xTerre]=new CaseTerre(yTerre,xTerre);
-			freeCases.remove(freeCases.get(iTerre));
-			
+			boolean bateauSurCaseTerre = false;
+			for(Boat b:bateaux2){
+				if(b.getPosition().getX()==yTerre && b.getPosition().getY()==xTerre){
+					bateauSurCaseTerre=true;
+				}
+			}
+			for(Boat b:bateaux1){
+				if(b.getPosition().getX()==yTerre && b.getPosition().getY()==xTerre){
+					bateauSurCaseTerre=true;
+				}
+			}
+			if(!bateauSurCaseTerre) {
+				tableau[yTerre][xTerre] = new CaseTerre(yTerre, xTerre);
+				freeCases.remove(freeCases.get(iTerre));
+			}
 		}
 		
 		
@@ -133,5 +141,4 @@ public class RandomMap extends Grille{
 		
 	}
 	
-
 }

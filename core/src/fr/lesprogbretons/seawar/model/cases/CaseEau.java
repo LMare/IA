@@ -6,10 +6,11 @@ import java.io.Serializable;
 /**
  * Classe CaseEau : sous-classe de Case
  */
-public class CaseEau extends Case implements Serializable{
+public class CaseEau extends Case implements Serializable {
 
     /**
      * Constructeur
+     *
      * @param x
      * @param y
      */

@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Logger;
 import fr.lesprogbretons.seawar.assets.Assets;
 import fr.lesprogbretons.seawar.controller.Controller;
-import fr.lesprogbretons.seawar.model.Partie;
 import fr.lesprogbretons.seawar.screen.SeaWarLoadingScreen;
 
 /**
@@ -17,116 +16,110 @@ import fr.lesprogbretons.seawar.screen.SeaWarLoadingScreen;
  */
 public class SeaWar implements ApplicationListener {
 
-	public static final int WORLD_WIDTH = 800;
-	public static final int WORLD_HEIGHT = 480;
+    public static final int WORLD_WIDTH = 800;
+    public static final int WORLD_HEIGHT = 480;
 
-	/**
-	 * {@link Logger} utilisé pour logger dans tout le jeu
-	 */
-	public static final Logger logger = new Logger("SeaWar");
+    /**
+     * {@link Logger} utilisé pour logger dans tout le jeu
+     */
+    public static final Logger logger = new Logger("SeaWar");
 
-	/**
-	 * {@link Game} est publique et permet de changer les {@link Screen}
-	 */
-	public static final Game game = new Game() {
-		@Override
-		public void create() {
-			setScreen(new SeaWarLoadingScreen());
-		}
-	};
+    /**
+     * {@link Game} est publique et permet de changer les {@link Screen}
+     */
+    public static final Game game = new Game() {
+        @Override
+        public void create() {
+            setScreen(new SeaWarLoadingScreen());
+        }
+    };
 
-	/**
-	 * La classe {@link Assets} qui est la seule responsable des ressources
-	 */
-	public static final Assets assets = new Assets();
+    /**
+     * La classe {@link Assets} qui est la seule responsable des ressources
+     */
+    public static final Assets assets = new Assets();
 
-	/**
-	 * Le {@link SpriteBatch} qui permet de rendre les textures du jeu
-	 */
-	public static SpriteBatch spriteBatch;
+    /**
+     * Le {@link SpriteBatch} qui permet de rendre les textures du jeu
+     */
+    public static SpriteBatch spriteBatch;
 
-	/**
-	 * Le {@link ShapeRenderer} qui permet de rendre les formes géométriques du jeu
-	 */
-	public static ShapeRenderer shapeRenderer;
+    /**
+     * Le {@link ShapeRenderer} qui permet de rendre les formes géométriques du jeu
+     */
+    public static ShapeRenderer shapeRenderer;
 
-	/**
-	 * La {@link Partie} qui contient toutes les données du jeu
-	 */
-	public static Partie partie;
+    /**
+     * Le {@link Controller} qui permet de mettre a jour les données de la partie avec les actions du joueur
+     */
+    public static Controller seaWarController;
 
-	/**
-	 * Le {@link Controller} qui permet de mettre a jour les données de la partie avec les actions du joueur
-	 */
-	public static Controller seaWarController;
+    @Override
+    public void create() {
+        try {
+            logger.setLevel(Logger.DEBUG);
+            Gdx.app.setLogLevel(Application.LOG_DEBUG);
+            Texture.setAssetManager(assets.getManager());
+            spriteBatch = new SpriteBatch();
+            shapeRenderer = new ShapeRenderer();
+            seaWarController = new Controller();
+            game.create();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            Gdx.app.exit();
+        }
+    }
 
-	@Override
-	public void create() {
-		try {
-			logger.setLevel(Logger.DEBUG);
-			Gdx.app.setLogLevel(Application.LOG_DEBUG);
-			Texture.setAssetManager(assets.getManager());
-			spriteBatch = new SpriteBatch();
-			shapeRenderer = new ShapeRenderer();
-			partie = new Partie();
-			seaWarController = new Controller();
-			game.create();
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-			Gdx.app.exit();
-		}
-	}
+    @Override
+    public void resume() {
+        try {
+            game.resume();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            Gdx.app.exit();
+        }
+    }
 
-	@Override
-	public void resume() {
-		try {
-			game.resume();
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-			Gdx.app.exit();
-		}
-	}
+    @Override
+    public void render() {
+        try {
+            game.render();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            Gdx.app.exit();
+        }
+    }
 
-	@Override
-	public void render() {
-		try {
-			game.render();
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-			Gdx.app.exit();
-		}
-	}
+    @Override
+    public void resize(int width, int height) {
+        try {
+            game.resize(width, height);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            Gdx.app.exit();
+        }
+    }
 
-	@Override
-	public void resize(int width, int height) {
-		try {
-			game.resize(width, height);
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-			Gdx.app.exit();
-		}
-	}
+    @Override
+    public void pause() {
+        try {
+            game.pause();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            Gdx.app.exit();
+        }
+    }
 
-	@Override
-	public void pause() {
-		try {
-			game.pause();
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-			Gdx.app.exit();
-		}
-	}
+    @Override
+    public void dispose() {
+        game.dispose();
+        assets.dispose();
 
-	@Override
-	public void dispose() {
-		game.dispose();
-		assets.dispose();
-
-		if (spriteBatch != null) {
-			spriteBatch.dispose();
-		}
-		if (shapeRenderer != null) {
-			shapeRenderer.dispose();
-		}
-	}
+        if (spriteBatch != null) {
+            spriteBatch.dispose();
+        }
+        if (shapeRenderer != null) {
+            shapeRenderer.dispose();
+        }
+    }
 }

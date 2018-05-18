@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Classe Case
  */
-public abstract class Case implements Serializable{
+public abstract class Case implements Serializable {
 
     //Coordonnées
     protected int x;
@@ -29,13 +29,13 @@ public abstract class Case implements Serializable{
 
     /**
      * Constructeur
+     *
      * @param xe : colonne
      * @param ye : ligne
      */
 
     /*-------------------------------------------------------------------*/
     //Getters & Setters
-
     public Case(int xe, int ye) {
         x = xe;
         y = ye;
@@ -77,6 +77,7 @@ public abstract class Case implements Serializable{
 
     /**
      * Compare deux Case
+     *
      * @param o : Case à comparer
      * @return true si les cases sont les mêmes, false sinon
      */

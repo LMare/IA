@@ -31,9 +31,7 @@ import fr.lesprogbretons.seawar.utils.Utils;
 
 import java.util.ArrayList;
 
-import static fr.lesprogbretons.seawar.SeaWar.partie;
 import static fr.lesprogbretons.seawar.SeaWar.seaWarController;
-
 
 /**
  * Classe qui permet d'afficher une carte prédéfinie
@@ -81,9 +79,9 @@ public class SeaWarMapScreen extends ScreenAdapter {
         this.manager = manager;
         switch (manager.getMyUiType()) {
             case GAME:
-                widthMap = partie.getMap().getLargeur();
-                heightMap = partie.getMap().getHauteur();
-                g = partie.getMap();
+                widthMap = seaWarController.getPartie().getMap().getLargeur();
+                heightMap = seaWarController.getPartie().getMap().getHauteur();
+                g = seaWarController.getPartie().getMap();
                 break;
         }
 
@@ -95,6 +93,7 @@ public class SeaWarMapScreen extends ScreenAdapter {
         //Redimentionner l'écran pour faire rentrer la map
         int width = 800;
         int height = 800;
+//        Gdx.graphics.setWindowedMode(1280, 720);
         Gdx.graphics.setWindowedMode(width, height);
 
         float w = Gdx.graphics.getWidth();

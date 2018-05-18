@@ -73,9 +73,9 @@ public class GameUi extends Ui {
                 Dialog d;
                 boolean turnOver = seaWarController.endTurn();
                 if (!turnOver) {
-                    if (partie.isFin()) {
-                        d = new Dialog("The winner is " + partie.getWinner().toString(), skin, "dialog")
-                                .text(partie.getWinner().toString() + " wins by " + partie.getVictoryType().toString())
+                    if (seaWarController.getPartie().isFin()) {
+                        d = new Dialog("The winner is " + seaWarController.getPartie().getWinner().toString(), skin, "dialog")
+                                .text(seaWarController.getPartie().getWinner().toString() + " wins by " + seaWarController.getPartie().getVictoryType().toString())
                                 .button(restart, true)
                                 .show(s);
                         openedDialog = d;
@@ -151,9 +151,9 @@ public class GameUi extends Ui {
 
     public void showInfoMessage() {
         //Récupérer les turnInfos
-        Case aCase = partie.getMap().getCase(selectedTile.row, selectedTile.column);
-        if (partie.getMap().casePossedeBateaux(aCase)) {
-            Boat boat = partie.getMap().bateauSurCase(aCase);
+        Case aCase = seaWarController.getPartie().getMap().getCase(selectedTile.row, selectedTile.column);
+        if (seaWarController.getPartie().getMap().casePossedeBateaux(aCase)) {
+            Boat boat = seaWarController.getPartie().getMap().bateauSurCase(aCase);
 
             openedDialog = new Dialog(boat.getJoueur().toString() + "'s " + boat.toString(),
                     skin, "default");
@@ -195,7 +195,7 @@ public class GameUi extends Ui {
                 }
             });
 
-            if (!boat.getJoueur().equals(partie.getCurrentPlayer())) {
+            if (!boat.getJoueur().equals(seaWarController.getPartie().getCurrentPlayer())) {
                 changeButton.setVisible(false);
             }
 
@@ -244,21 +244,21 @@ public class GameUi extends Ui {
     public void startTurnMessage() {
         //Construire la string qui contient les turnInfos de tour
         ArrayList<String> boatHps = new ArrayList<>();
-        if (partie.getCurrentPlayer().getNumber() == 1) {
-            for (Boat b : partie.getMap().getBateaux1()) {
+        if (seaWarController.getPartie().getCurrentPlayer().getNumber() == 1) {
+            for (Boat b : seaWarController.getPartie().getMap().getBateaux1()) {
                 boatHps.add(b.turnInfos());
             }
         } else {
-            for (Boat b : partie.getMap().getBateaux2()) {
+            for (Boat b : seaWarController.getPartie().getMap().getBateaux2()) {
                 boatHps.add(b.turnInfos());
             }
         }
 
-        StringBuilder tour = new StringBuilder(partie.getCurrentPlayer().getPharesPossedes() + " lighthouses taken\n");
+        StringBuilder tour = new StringBuilder(seaWarController.getPartie().getCurrentPlayer().getPharesPossedes() + " lighthouses taken\n");
         for (String s : boatHps) {
             tour.append(s).append("\n");
         }
-        openedDialog = new Dialog("It's " + partie.getCurrentPlayer().toString() + " turn", skin, "default")
+        openedDialog = new Dialog("It's " + seaWarController.getPartie().getCurrentPlayer().toString() + " turn", skin, "default")
                 .text(tour.toString())
                 .button("Okay", true)
                 .show(s);

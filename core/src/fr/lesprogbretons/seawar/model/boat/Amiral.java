@@ -1,7 +1,7 @@
 package fr.lesprogbretons.seawar.model.boat;
 
-import fr.lesprogbretons.seawar.model.cases.Case;
 import fr.lesprogbretons.seawar.model.Player;
+import fr.lesprogbretons.seawar.model.cases.Case;
 
 import java.io.Serializable;
 
@@ -33,7 +33,7 @@ public class Amiral extends Boat implements Serializable {
         clone.setMainCD(this.getMainCD());
         clone.setSecCD(this.getSecCD());
         clone.setHp(this.getHp());
-
+        clone.joueur = (Player) this.joueur.clone();
         return clone;
     }
 

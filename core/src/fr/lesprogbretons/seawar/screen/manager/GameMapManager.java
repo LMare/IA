@@ -26,7 +26,7 @@ public class GameMapManager implements MapManager {
     //Vue
     private SeaWarMapScreen myMapScreen;
     //Modèle
-    private Grille g = partie.getMap();
+    private Grille g = seaWarController.getPartie().getMap();
 
     public GameMapManager() {
         //Pas de sélection pour le début
@@ -34,7 +34,8 @@ public class GameMapManager implements MapManager {
         //Load music
         music = (Music) assets.get(Assets.gameMusic);
         music.setLooping(true);
-        music.play();
+//        music.play();
+        seaWarController.launchTurn();
     }
 
     @Override
@@ -56,15 +57,14 @@ public class GameMapManager implements MapManager {
     public void start() {
         //Montrer le message de début de tour
         myUi.startTurnMessage();
-        music.play();
+//        music.play();
     }
 
     @Override
     public void update() {
-    	partie.launchTurn();
         //On met à jour l'interface
-        myUi.setTurn(partie.getTurnCounter());
-        myUi.setPlayer(partie.getCurrentPlayer().toString());
+        myUi.setTurn(seaWarController.getPartie().getTurnCounter());
+        myUi.setPlayer(seaWarController.getPartie().getCurrentPlayer().toString());
 
         //Retirer les sélections précédentes
         myMapScreen.removeLayerMark(SeaWarMapScreen.SELECT_LAYER_NAME);
@@ -72,7 +72,7 @@ public class GameMapManager implements MapManager {
 
         ArrayList<Boat> boats;
 
-        if (partie.getCurrentPlayer().getNumber() == 1) {
+        if (seaWarController.getPartie().getCurrentPlayer().getNumber() == 1) {
             boats = g.getBateaux1();
         } else {
             boats = g.getBateaux2();
@@ -89,13 +89,13 @@ public class GameMapManager implements MapManager {
             Case aCase = g.getCase(selectedTile.row, selectedTile.column);
 
             //Si un bateau est sélectionné
-            if (partie.isAnyBateauSelectionne()) {
+            if (seaWarController.getPartie().isAnyBateauSelectionne()) {
                 //Si il est sur la case sélectionnée
                 if (g.casePossedeBateaux(aCase)) {
                     //Récupérer bateau
                     Boat boat = g.bateauSurCase(aCase);
                     //Si il appartient au joueur qui joue
-                    if (boat.getJoueur().equals(partie.getCurrentPlayer())) {
+                    if (boat.getJoueur().equals(seaWarController.getPartie().getCurrentPlayer())) {
                         //Mettre turnInfos bateau sélectionné
                         myUi.setInfoSelected(boat.infosCurrentPlayer());
                         //Mettre cases dispo déplacements
@@ -103,7 +103,7 @@ public class GameMapManager implements MapManager {
                             myMapScreen.batchSelectionMark(g.getCasesDisponibles(aCase, 1));
                         //Mettre cases dispo attaques
                         if (boat.canShoot())
-                            myMapScreen.batchAttackMark(g.getBoatInRange(boat, partie.getOtherPlayer()));
+                            myMapScreen.batchAttackMark(g.getBoatInRange(boat, seaWarController.getPartie().getOtherPlayer()));
                     } else {
                         //Sinon montrer sa portée de déplacement
                         myMapScreen.batchSelectionMark(g.getCasesDisponibles(aCase, boat.getMoveAvailable()));
@@ -119,7 +119,7 @@ public class GameMapManager implements MapManager {
                     myUi.setInfoSelected(aCase.infoCase());
                 } else {
                     //Si c'est un bateau de l'adversaire (impossible à sélectionner)
-                    if (!g.casePossedeBateau(aCase, partie.getCurrentPlayer())) {
+                    if (!g.casePossedeBateau(aCase, seaWarController.getPartie().getCurrentPlayer())) {
                         Boat boat = g.bateauSurCase(aCase);
                         myUi.setInfoSelected(boat.infosOtherPlayer());
                         myMapScreen.batchSelectionMark(g.getCasesDisponibles(aCase, boat.getMove()));
@@ -141,8 +141,8 @@ public class GameMapManager implements MapManager {
             Utils.getSelectedHexagon(touchX, touchY, selectedTile);
 //            logger.debug("col : " + selectedTile.column + " row : " + selectedTile.row);
 
-            if (selectedTile.row >= 0 && selectedTile.row < partie.getMap().getHauteur()
-                    && selectedTile.column >= 0 && selectedTile.column < partie.getMap().getLargeur()) {
+            if (selectedTile.row >= 0 && selectedTile.row < seaWarController.getPartie().getMap().getHauteur()
+                    && selectedTile.column >= 0 && selectedTile.column < seaWarController.getPartie().getMap().getLargeur()) {
 
                 if (!rightClicked) {
                     //Clic gauche

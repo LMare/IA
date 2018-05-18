@@ -1,31 +1,31 @@
 package fr.lesprogbretons.seawar.model;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.lesprogbretons.seawar.model.boat.Boat;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Classe joueur
  */
-public class Player implements Serializable{
+public class Player implements Serializable {
 
     //Numéro du joueur
     private int number;
 
     //Nombre de phares qu'il possede
     private int pharesPossedes = 0;
-    
+
     // name of the player
     private String name;
 
-    
+
     //
-    private  List<Boat>  boats; 
-    
+    private List<Boat> boats;
+
     /**
      * Constructeur
+     *
      * @param number
      */
     public Player(int number) {
@@ -33,26 +33,27 @@ public class Player implements Serializable{
     }
 
 
-   
-    
+    public Player(int number, String name) {
+        // TODO Auto-generated constructor stub
+        this.name = name;
 
-	public Player(int number, String name) {
-		// TODO Auto-generated constructor stub
-    	this.name= name;
-    	
-	}
+    }
 
-	public Player(int number, String name, List<Boat> boats) {
-		this.number=number;
-		this.name=name;
-		this.boats=boats;
-		
-		
-	}
-	
+    public Player(int number, String name, List<Boat> boats) {
+        this.number = number;
+        this.name = name;
+        this.boats = boats;
+
+
+    }
+
 
     public Object clone(List<Boat> boats) {
-    	Player clone = new Player(this.number, this.name, boats);
+        Player clone = new Player(this.number, this.name, boats);
+        //Set player to boats
+        for (Boat b : clone.getBoats()) {
+            b.setJoueur(clone);
+        }
         clone.setPharesPossedes(this.getPharesPossedes());
         return clone;
     }
@@ -62,9 +63,9 @@ public class Player implements Serializable{
         return new Player(this.number);
 
     }
-    
-    
-	//Getters & Setters
+
+
+    //Getters & Setters
     public int getNumber() {
         return number;
     }
@@ -85,28 +86,28 @@ public class Player implements Serializable{
     public String toString() {
         return "Player " + number;
     }
-    
+
     public String getName() {
-		return name;
-	}
+        return name;
+    }
 
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
 
-	public List<Boat> getBoats() {
-		return boats;
-	}
+    public List<Boat> getBoats() {
+        return boats;
+    }
 
-	public void setBoats(List<Boat> boats) {
-		this.boats = boats;
-	}
+    public void setBoats(List<Boat> boats) {
+        this.boats = boats;
+    }
 
-	public void addBoat(Boat boat) {
-		this.boats.add(boat);
-	}
-    
-    
+    public void addBoat(Boat boat) {
+        this.boats.add(boat);
+    }
+
+
 }

@@ -36,7 +36,7 @@ public abstract class Boat implements Serializable {
     private int secCD = 0;
 
     //Joueur possédant ce bateau
-    Player joueur;
+    protected Player joueur;
 
     public boolean isEstBloque() {
         return estBloque;
@@ -62,6 +62,7 @@ public abstract class Boat implements Serializable {
 
 
     public abstract Object clone();
+
     /*----------------------------------------------------------------------------*/
     //Getters & Setters
     public int getMove() {
@@ -143,6 +144,10 @@ public abstract class Boat implements Serializable {
         return orientation;
     }
 
+    public void setJoueur(Player joueur) {
+        this.joueur = joueur;
+    }
+
     public void setOrientation(Orientation orientation) {
         this.orientation = orientation;
     }
@@ -167,11 +172,17 @@ public abstract class Boat implements Serializable {
         moveAvailable = n;
     }
 
-    public void setHp(int hp) { this.hp = hp; }
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
 
-    public void setMainCD(int mainCD) { this.mainCD = mainCD; }
+    public void setMainCD(int mainCD) {
+        this.mainCD = mainCD;
+    }
 
-    public void setSecCD(int secCD) { this.secCD = secCD; }
+    public void setSecCD(int secCD) {
+        this.secCD = secCD;
+    }
 
     /*---------------------------------------------------------------------------------------------*/
     //infosCurrentPlayer

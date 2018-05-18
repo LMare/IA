@@ -33,6 +33,7 @@ public class Fregate extends Boat implements Serializable {
         clone.setMainCD(this.getMainCD());
         clone.setSecCD(this.getSecCD());
         clone.setHp(this.getHp());
+        clone.joueur = (Player) this.joueur.clone();
 
         return clone;
     }

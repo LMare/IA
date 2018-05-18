@@ -4,30 +4,39 @@ package fr.lesprogbretons.seawar.controller;
 
 /* Classe Controller qui va gère l'interraction avec l'utilisateur */
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import fr.lesprogbretons.seawar.ia.AbstractIA;
 import fr.lesprogbretons.seawar.ia.IAAleatoire;
+import fr.lesprogbretons.seawar.ia.IAThread;
 import fr.lesprogbretons.seawar.model.Partie;
+import fr.lesprogbretons.seawar.model.actions.Action;
+import fr.lesprogbretons.seawar.model.actions.Attack;
+import fr.lesprogbretons.seawar.model.actions.MoveBoat;
+import fr.lesprogbretons.seawar.model.actions.PassTurn;
 import fr.lesprogbretons.seawar.model.boat.Boat;
 import fr.lesprogbretons.seawar.model.cases.Case;
 import fr.lesprogbretons.seawar.model.map.Grille;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static fr.lesprogbretons.seawar.SeaWar.logger;
-import static fr.lesprogbretons.seawar.SeaWar.partie;
 
 /**
  * Classe Controller
  */
 public class Controller {
 
-    //Stocker une référence à l'IA afin de pouvoir l'arrêter
-    private AbstractIA ia;
+    private Partie partie;
+
+    public Controller() {
+    }
+
+    public Controller(Partie partie) {
+        this.partie = partie;
+    }
 
     public void nouvellePartie() {
         partie = new Partie();
@@ -37,6 +46,12 @@ public class Controller {
         partie = new Partie(g);
     }
 
+    public Object clone() {
+
+        Partie clonePartie = (Partie) this.partie.clone();
+
+        return new Controller(clonePartie);
+    }
 
     /**
      * Procédure qui gère la sélection d'une case quelconque à la souris
@@ -117,6 +132,14 @@ public class Controller {
         }
     }
 
+    public void setPartie(Partie partie) {
+        this.partie = partie;
+    }
+
+    public Partie getPartie() {
+        return partie;
+    }
+
     /**
      * Procédure qui finit le tour du joueur quand on appuie sur le bouton fin de tour
      */
@@ -142,27 +165,159 @@ public class Controller {
 
     }
 
-    public void save(String nom) {
-        FileHandle dossier = Gdx.files.local("saves/parties");
-        if (!dossier.exists()) {
-            dossier.mkdirs();
-        }
-        FileHandle fichier = Gdx.files.internal("saves/parties/" + nom + ".ser");
+    //** Partie IA **//
+    @SuppressWarnings("deprecation")
+    public synchronized void jouerIA() {
 
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(String.valueOf(fichier)))) {
-            oos.writeObject(partie);
-            oos.close();
+        if (partie.getCurrentPlayer() instanceof AbstractIA) {
+            int identifier = partie.getCurrentPlayer().getNumber();
 
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            AbstractIA ia = (AbstractIA) partie.getCurrentPlayer();
+            //TODO Change here
+            IAThread calcul = new IAThread(ia, this, executor);
+            executor.execute(calcul);
+            try {
+                if (!executor.awaitTermination(AbstractIA.TIME_TO_THINK, TimeUnit.MILLISECONDS)) {
+
+                    executor.shutdown();
+                }
+
+
+            } catch (InterruptedException ex) {
+                logger.error("Erreur arrêt IA", ex);
+//                Logger.getLogger(Partie.class.getName()).log(Level.SEVERE, "Erreur arrêt IA", ex);
+
+            }
+            try {
+
+                calcul.join();
+            } catch (InterruptedException e) {
+//                Logger.getLogger(Partie.class.getName()).log(Level.SEVERE, "Erreur IA", e);
+                logger.error("Erreur IA", e);
+
+            }
+            Action action;
+
+
+            if (calcul.getActionChoice() == null && ia.getMemorizedAction() == null) {
+
+                logger.debug(Thread.currentThread().getName() + ":"
+                        + " Aucune action choisie, aucune action memorisee");
+                logger.debug("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                logger.debug("!!!!!!!!!!!!!!!!!!!			HASARD		 !!!!!!!!!!!!");
+                logger.debug("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+
+                action = (new IAAleatoire(identifier).chooseAction(this));
+            } else if (calcul.getActionChoice() == null && ia.getMemorizedAction() != null) {
+
+                logger.debug(Thread.currentThread().getName() + ":"
+                        + "Aucune action choisie mais action mémorisée");
+                action = calcul.getActionChoice();
+
+
+            } else {
+
+                action = calcul.getActionChoice();
+
+            }
+
+            while (!validAction(ia, action)) {
+                logger.debug(Thread.currentThread().getName() + ":" + "Action non valide");
+                System.exit(0);
+                action = (new IAAleatoire(identifier).chooseAction(this));
+            }
+
+            logger.error("Action jouee = " + action);
+            action.apply(this);
+
+            // Kill remaining IAThread threads
+            for (Thread t : Thread.getAllStackTraces().keySet()) {
+                for (StackTraceElement ste : t.getStackTrace()) {
+                    if (ste.getClassName().equals("fr.lesprogbretons.seawar.ia.IAThread")) {
+                        t.stop();
+                    }
+                }
+            }
+
+            try {
+
+                Thread.sleep(200);
+            } catch (InterruptedException ex) {
+
+
+            }
+
         }
 
 
     }
 
-    public void load(Partie restoredPartie) {
-        partie = restoredPartie;
-        logger.debug("Restored save");
+
+    private boolean validAction(AbstractIA ia, Action action) {
+        if (action instanceof PassTurn) {
+            return true;
+
+        } else if (action instanceof MoveBoat) {
+
+            return true;
+
+        } else if (action instanceof Attack) {
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
+    public List<Action> getPossibleActions() {
+        ArrayList<Action> actions = new ArrayList<>();
+        Boat boat = this.partie.getBateauSelectionne();
+        // potential of the seletected boat
+        ArrayList<Case> cases = new ArrayList<>();
+
+        if (boat.getMoveAvailable() != 0 && !this.partie.getMap().getCasesDisponibles(boat.getPosition(), 1).isEmpty()) {
+            cases = this.partie.getMap().getCasesDisponibles(boat.getPosition(), 1);
+
+        } else {
+
+            System.err.println("no case are available");
+        }
+
+        if (!cases.isEmpty()) {
+            for (Case target : cases) {
+                actions.add(new MoveBoat(boat, target));
+            }
+        }
+        
+        // attack possibilities
+        ArrayList<Case> boatInRange = this.partie.getMap().getBoatInRange(boat, this.partie.getOtherPlayer());
+        if (!boatInRange.isEmpty() && boat.canShoot()) {
+            for (Case target : boatInRange) {
+                actions.add(new Attack(boat, target));
+            }
+        }
+
+        // pass the turn without doing nothing
+        actions.add(new PassTurn(boat));
+
+
+        return actions;
+    }
+
+    public void launchTurn() {
+        Thread t = new Thread(() -> {
+            logger.debug("Thread launched");
+            //logger.debug("Is there any Information");
+            while (partie.getCurrentPlayer() instanceof AbstractIA) {
+                logger.debug("Some thing happen or nothing");
+                jouerIA();
+                endTurn();
+                //setCurrentPlayer(getJoueur1());
+            }
+        });
+        t.start();
+    }
 }

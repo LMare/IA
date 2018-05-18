@@ -17,7 +17,7 @@ public class Assets {
             new AssetDescriptor<>("menuShip.jpg", Texture.class, param);
 
     public static final AssetDescriptor<TextureAtlas> hexes =
-                new AssetDescriptor<>("hexes.atlas", TextureAtlas.class);
+            new AssetDescriptor<>("hexes.atlas", TextureAtlas.class);
 
     public static final AssetDescriptor<Texture> background =
             new AssetDescriptor<>("back.png", Texture.class, param);
@@ -25,7 +25,7 @@ public class Assets {
     public static final AssetDescriptor<Skin> skin =
             new AssetDescriptor<>("skin/uiskin.json", Skin.class);
 
-//    public static final AssetDescriptor<Music> menuMusic = new AssetDescriptor<>("music/musiquemenu.mp3", Music.class);
+    //    public static final AssetDescriptor<Music> menuMusic = new AssetDescriptor<>("music/musiquemenu.mp3", Music.class);
     public static final AssetDescriptor<Music> gameMusic = new AssetDescriptor<>("music/grandioso.mp3", Music.class);
 
     public void load() {

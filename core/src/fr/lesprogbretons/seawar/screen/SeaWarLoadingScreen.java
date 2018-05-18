@@ -12,8 +12,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import fr.lesprogbretons.seawar.SeaWar;
 import fr.lesprogbretons.seawar.utils.Utils;
 
-//Utilisé pour ne pas avoir à réécrire SeaWar. devant chaque
 import static fr.lesprogbretons.seawar.SeaWar.*;
+
+//Utilisé pour ne pas avoir à réécrire SeaWar. devant chaque
 
 
 /**
