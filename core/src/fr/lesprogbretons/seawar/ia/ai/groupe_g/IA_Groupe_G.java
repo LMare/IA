@@ -1,5 +1,6 @@
 package fr.lesprogbretons.seawar.ia.ai.groupe_g;
 
+import fr.lesprogbretons.seawar.controller.Controller;
 import fr.lesprogbretons.seawar.ia.AbstractIA;
 import fr.lesprogbretons.seawar.ia.ai.groupe_g.alphabeta.Max;
 import fr.lesprogbretons.seawar.ia.ai.groupe_g.alphabeta.Noeud;
@@ -16,12 +17,14 @@ public class IA_Groupe_G extends AbstractIA {
         super(number);
     }
 
+
+
     @Override
-    public Action chooseAction(Partie partie) {
+    public Action chooseAction(Controller controller) {
         // On a le droit à 4 threads
 
         // On commence le tour, il faut créer un noeud
-        Max initial = new Max((Etat) partie.clone());
+        Max initial = new Max(new Etat((Partie) controller.getPartie().clone()));
 
         // on a TIME_TO_THINK = 1000 ms pour trouver un executer une/des actions
         long debut = System.currentTimeMillis();
@@ -35,12 +38,13 @@ public class IA_Groupe_G extends AbstractIA {
 
                 //TODO: retrouver la meilleur branche avec la valeur alphabeta !
                 //TODO: Executer la meilleur action/ les actions (tout les noeuds max)
+                 // on ne peux faire qu'une seule action et il faut l'enregister...
                 Noeud noeud = initial;
-                while (noeud instanceof Max) {
+                /*while (noeud instanceof Max) {
                     noeud.getBestNoeud().getAction().apply(null);
                     noeud = noeud.getBestNoeud();
-                }
-
+                }*/
+                memoriseAction(noeud.getBestNoeud().getAction());
 
                 process = false;
             } else { // On a du temps pour trouver une solution plus precise

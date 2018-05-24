@@ -1,6 +1,7 @@
 package fr.lesprogbretons.seawar.model.map;
 
 import fr.lesprogbretons.seawar.ia.IAAleatoire;
+import fr.lesprogbretons.seawar.ia.ai.groupe_g.IA_Groupe_G;
 import fr.lesprogbretons.seawar.model.Orientation;
 import fr.lesprogbretons.seawar.model.Player;
 import fr.lesprogbretons.seawar.model.boat.Amiral;
@@ -23,9 +24,9 @@ public class Grille implements Serializable {
     ArrayList<Boat> bateaux1;
     ArrayList<Boat> bateaux2;
     //Joueurs
-//    private Player joueur1 = new Player(1);
-    private Player joueur1 = new IAAleatoire(1, "IAAleatoire1", bateaux1);
-    private Player joueur2 = new IAAleatoire(2, "IAAleatoire2", bateaux2);
+    private Player joueur1 = new Player(1);
+    private Player joueur2 = new IAAleatoire(1, "IAAleatoire1", bateaux1);
+   // private Player joueur2 = new IA_Groupe_G(2);
 
 
     //Cases de la Grille
